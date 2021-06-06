@@ -36,7 +36,6 @@ const PatientListPage = () => {
       setError(e.response?.data?.error || 'Unknown error');
     }
   };
-  console.log(patients);
   return (
     <div className="App">
       <Container textAlign="center">

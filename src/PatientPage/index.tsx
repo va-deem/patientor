@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import {apiBaseUrl} from "../constants";
-import {useStateValue} from "../state";
+import {useStateValue, addPatient} from "../state";
 
 import {Patient} from '../types';
 import {useParams} from 'react-router-dom';
@@ -17,7 +17,7 @@ const PatientPage = () => {
         const {data: patientFromApi} = await axios.get<Patient>(
           `${apiBaseUrl}/patients/${id}`
         );
-        dispatch({type: "ADD_PATIENT", payload: patientFromApi});
+        dispatch(addPatient(patientFromApi));
       } catch (e) {
         console.error(e);
       }
@@ -25,7 +25,7 @@ const PatientPage = () => {
     if (!patients[id]) {
       void fetchPatient();
     }
-  }, [dispatch]);
+  }, []);
 
   if (!patients[id]) return null;
 
