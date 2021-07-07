@@ -24,6 +24,27 @@ const EntryDetails = ({entry}: { entry: Entry }) => {
     return diagnose ? `${diagnose.code}: ${diagnose.name}` : null;
   };
 
+  const healthCheckRatingIcon = (healthCheckRating: number)  => {
+    switch (healthCheckRating) {
+      case 0:
+        return { color: 'green' };
+      case 1:
+        return { color: 'yellow' };
+      case 2:
+        return { color: 'red' };
+      case 3:
+        return { color: 'black' };
+      default:
+        return '';
+    }
+  };
+
+  const renderHealthCheckRatingIcon = (entry: Entry) => {
+    if ('healthCheckRating' in entry) {
+      return <Icon name='heart' style={healthCheckRatingIcon(entry.healthCheckRating)} />;
+    }
+  };
+
   const renderEntryInfo = (entry: Entry, icon: SemanticICONS | undefined) =>
     (<Segment>
       <div className="content">
@@ -36,6 +57,7 @@ const EntryDetails = ({entry}: { entry: Entry }) => {
               (<ListItem key={code}>{getCodeName(code)}</ListItem>)
             )}
           </List>) : []}
+        {renderHealthCheckRatingIcon(entry)}
       </div>
     </Segment>);
 
