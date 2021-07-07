@@ -1,9 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 import {apiBaseUrl} from "../constants";
-import {useStateValue, addPatient} from "../state";
+import {useStateValue, addPatient, addDiagnoses} from "../state";
 
-import {Patient, Entry} from '../types';
+import {Patient, Entry, DiagnoseEntry} from '../types';
 import {useParams} from 'react-router-dom';
 import {Container, List, ListItem, Icon} from "semantic-ui-react";
 import EntryDetails from './EntryDetails';
@@ -26,6 +26,20 @@ const PatientPage = () => {
     if (!patients[id]) {
       void fetchPatient();
     }
+  }, []);
+
+  React.useEffect(() => {
+    const fetchDiagnoses = async () => {
+      try {
+        const {data: diagnosesFromApi} = await axios.get<DiagnoseEntry[]>(
+          `${apiBaseUrl}/diagnoses`
+        );
+        dispatch(addDiagnoses(diagnosesFromApi));
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    void fetchDiagnoses();
   }, []);
 
   if (!patients[id]) return null;

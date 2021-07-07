@@ -8,8 +8,10 @@ import {
 } from "semantic-ui-react";
 
 import {Entry} from '../types';
+import {useStateValue} from "../state";
 
 const EntryDetails = ({entry}: { entry: Entry }) => {
+  const [{diagnoses},] = useStateValue();
 
   const assertNever = (value: never): never => {
     throw new Error(
@@ -17,17 +19,23 @@ const EntryDetails = ({entry}: { entry: Entry }) => {
     );
   };
 
+  const getCodeName = (code: string) => {
+    const diagnose = diagnoses.find(el => el.code === code);
+    return diagnose ? `${diagnose.code}: ${diagnose.name}` : null;
+  };
+
   const renderEntryInfo = (entry: Entry, icon: SemanticICONS | undefined) =>
     (<Segment>
       <div className="content">
-      <Icon name={icon} />
-      {`${entry.date} ${entry.description}`}
-      {entry.diagnosisCodes?.length ?
-        (<List>
-          {entry.diagnosisCodes.map(code =>
-            (<ListItem key={code}>{code}</ListItem>)
-          )}
-        </List>) : []}
+        <Icon name={icon} />
+        {`${entry.date} ${entry.description}`}
+        {entry.diagnosisCodes?.length ?
+          (<List>
+            {entry.diagnosisCodes.map(code =>
+
+              (<ListItem key={code}>{getCodeName(code)}</ListItem>)
+            )}
+          </List>) : []}
       </div>
     </Segment>);
 
